@@ -51,6 +51,12 @@ app.use(
   })
 );
 
+app.use(function(req,res,next){
+  console.log(req.session);
+  console.log("=====================");
+  console.log(req.user);
+})
+
 app.use("/login", loginRoutes);
 app.use("/cards", cardRoutes);
 app.use("/register", registerRoutes);
