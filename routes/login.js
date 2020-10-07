@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
       .then(function (hash) {
         if (hash) {
           req.session.user = user;
-          console.login("login Session:",req.session);
+          console.log("login Session:",req.session);
           res.status(200).send(user);
         }
       })
