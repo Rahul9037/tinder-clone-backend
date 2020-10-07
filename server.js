@@ -43,19 +43,13 @@ app.use(
     secret: process.env.secret,
     resave: false,
     saveUninitialized: true,
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
     cookie: {
       expires: 600000,
       secure: true,
     },
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
   })
 );
-
-app.use(function(req,res,next){
-  console.log(req.session);
-  console.log("=====================");
-  console.log(req.user);
-})
 
 app.use("/login", loginRoutes);
 app.use("/cards", cardRoutes);
