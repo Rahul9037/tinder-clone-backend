@@ -28,22 +28,15 @@ app.use(morgan("dev"));
 app.use(
   session({
     key: "user_id",
-    secret: "tindersecret",
-    resave: true,
+    secret: process.env.secret,
+    resave: false,
     saveUninitialized: true,
     cookie: {
       expires: 600000,
-      secure : false,
+      secure : true,
     },
   })
 );
-
-// app.use((req, res, next) => {
-//   if (req.session.user_id && !req.session.user) {
-//     res.clearCookie("user_id");
-//   }
-//   next();
-// });
 
 app.use("/login", loginRoutes);
 app.use("/cards", cardRoutes);
