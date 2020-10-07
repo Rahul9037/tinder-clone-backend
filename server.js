@@ -42,7 +42,7 @@ app.use(
     key: "user_id",
     secret: process.env.secret,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
     cookie: {
       expires: 600000,
@@ -50,6 +50,12 @@ app.use(
     },
   })
 );
+
+app.use(function(req,res,next){
+  console.log(req.session);
+  console.log("=========");
+  next();
+})
 
 app.use("/login", loginRoutes);
 app.use("/cards", cardRoutes);
