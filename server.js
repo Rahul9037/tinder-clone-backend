@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 require("dotenv/config");
 
 //App Configs:
@@ -46,6 +47,7 @@ app.use(
       expires: 600000,
       secure: true,
     },
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
   })
 );
 
