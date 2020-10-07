@@ -46,9 +46,6 @@ app.use(
       expires: 600000,
       secure: true,
     },
-    store: new (require("express-sessions"))({
-      storage: "mongodb",
-    }),
   })
 );
 
