@@ -10,6 +10,17 @@ const app = express();
 const port = process.env.PORT || 8001;
 const connection_url = process.env.CONNECTION_URL;
 
+//Mongoose Connection
+mongoose.connect(
+  connection_url,
+  {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  () => console.log("Connected")
+);
+
 //Import Routes
 const loginRoutes = require("./routes/login");
 const cardRoutes = require("./routes/cards");
@@ -20,7 +31,7 @@ const logoutRoutes = require("./routes/logout");
 
 // Middlewares:
 app.use(express.json());
-app.use(cors({ credentials : true,origin : true}));
+app.use(cors({ credentials: true, origin: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/public"));
 app.use(morgan("dev"));
@@ -33,8 +44,11 @@ app.use(
     saveUninitialized: true,
     cookie: {
       expires: 600000,
-      secure : true,
+      secure: true,
     },
+    store: new (require("express-sessions"))({
+      storage: "mongodb",
+    }),
   })
 );
 
@@ -43,17 +57,6 @@ app.use("/cards", cardRoutes);
 app.use("/register", registerRoutes);
 app.use("/upload", uploadRoutes);
 app.use("/sessionChecker", sessionRoutes);
-app.use("/logout" , logoutRoutes);
-
-//Mongoose Connection
-mongoose.connect(
-  connection_url,
-  {
-    useCreateIndex: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  () => console.log("Connected")
-);
+app.use("/logout", logoutRoutes);
 
 app.listen(port, () => console.log("heyy on port 8001"));
