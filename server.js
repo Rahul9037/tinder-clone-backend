@@ -31,6 +31,7 @@ const sessionRoutes = require("./routes/sessionChecker");
 const logoutRoutes = require("./routes/logout");
 
 // Middlewares:
+app.enable('trust proxy',1);
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
@@ -44,6 +45,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    proxy : true,
     cookie: {
       maxAge: 600000,
       secure: true,
