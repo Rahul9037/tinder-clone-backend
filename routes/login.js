@@ -7,20 +7,31 @@ require("dotenv/config");
 
 router.post("/", async (req, res) => {
   const loginDetails = req.body;
+  let userDetails = null;
   const user = await User.findOne({ email: loginDetails.email });
   if (user) {
     bcrypt
       .compare(loginDetails.password, user.password)
       .then(function (hash) {
         if (hash) {
-          req.session.user = user;
-          console.log("login Session:",req.session);
-          res.status(200).send(user);
+          req.session.user = user._id;
+          userDetails = {
+            name: user.name,
+            email: user.email,
+            age: user.age,
+            phone: user.phone,
+            profile: user.profile,
+          };
+          res
+            .status(200)
+            .send({ msg: "Login Successfull!", userdetails: userDetails });
+        } else {
+          res.status(200).send({ msg: "Please check the credentials!!" });
         }
       })
-      .catch((error) => res.status(400).send(error.message));
+      .catch((error) => res.status(500).send(error.message));
   } else {
-    res.status(401).send("UnAutherised");
+    res.status(200).send({ msg: "User not found!" });
   }
 });
 
@@ -37,9 +48,9 @@ router.post("/phone", async (req, res) => {
         channel: phoneValidationDetails.channel,
       })
       .then((data) => {
-        res.status(200).send("OTP Sent Successfully!");
+        res.status(200).send({ msg: "OTP Sent Successfully!" });
       })
-      .catch((error) => res.status(400).send(error.message));
+      .catch((error) => res.status(500).send(error.message));
   } else {
     res.status(400).send("Not found!");
   }
@@ -48,6 +59,7 @@ router.post("/phone", async (req, res) => {
 router.post("/phone-verify", async (req, res) => {
   const phoneValidationDetails = req.body;
   let approved = false;
+  let userDetails = null;
   client.verify
     .services(process.env.serviceID)
     .verificationChecks.create({
@@ -61,15 +73,30 @@ router.post("/phone-verify", async (req, res) => {
         approved = false;
       }
     })
-    .catch((error) => res.status(400).send(error.message));
-  const user = await User.findOne({
-    phone: phoneValidationDetails.phonenumber,
-  });
-  if (user) {
-    req.session.user = user;
-    res.status(200).send(user);
-  } else {
-    res.status(400).send("Not found!");
+    .catch((error) => res.status(500).send(error.message));
+  if (approved) {
+    const user = await User.findOne({
+      phone: phoneValidationDetails.phonenumber,
+    });
+    if (user) {
+      req.session.user = user._id;
+      userDetails = {
+        name: user.name,
+        email: user.email,
+        age: user.age,
+        phone: user.phone,
+        profile: user.profile,
+      };
+      res
+        .status(200)
+        .send({ msg: "Login Successfull!", userdetails: userDetails });
+    } else {
+      res.status(200).send({ msg: "User not found!" });
+    }
+  }
+  else
+  {
+    res.status(200).send({ msg: "Wrong OTP!! Couldnot verify user!" });
   }
 });
 

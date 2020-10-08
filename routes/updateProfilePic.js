@@ -20,7 +20,6 @@ router.post('/' ,  (req,res) => {
     upload(req,res , async () => {
         const email = req.body.email;
         const file = req.file;
-        console.log("file",req.file);
         const resp = await User.updateOne({ email : email} ,
             { $set: { profile : file } })
         if(resp.n === 1)

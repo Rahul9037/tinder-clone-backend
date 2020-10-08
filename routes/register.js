@@ -50,7 +50,6 @@ router.post('/verify' , (req,res) => {
         code: phoneValidationDetails.code,
       })
       .then((data) => {
-        console.log(data);
         res.status(200).send(data.status);
       })
       .catch((error) => res.status(400).send(error.message));

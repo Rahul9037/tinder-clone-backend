@@ -49,16 +49,10 @@ app.use(
     cookie: {
       maxAge: 600000,
       secure: true,
-      sameSite:"none",
     },
   })
 );
 
-app.use(function(req,res,next){
-  console.log(req.session);
-  console.log("=========");
-  next();
-})
 
 app.use("/login", loginRoutes);
 app.use("/cards", cardRoutes);
@@ -67,4 +61,4 @@ app.use("/upload", uploadRoutes);
 app.use("/sessionChecker", sessionRoutes);
 app.use("/logout", logoutRoutes);
 
-app.listen(port, () => console.log("heyy on port 8001"));
+app.listen(port, () => console.log("heyy on port",port));
