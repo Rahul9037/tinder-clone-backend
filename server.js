@@ -48,7 +48,8 @@ app.use(
     proxy : true,
     cookie: {
       maxAge: 600000,
-      secure: false,
+      secure: true,
+      sameSite:"none",
     },
   })
 );
