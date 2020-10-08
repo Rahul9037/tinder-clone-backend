@@ -33,7 +33,7 @@ const logoutRoutes = require("./routes/logout");
 // Middlewares:
 app.set('trust proxy',1);
 app.use(express.json());
-app.use(cors());
+app.use(cors({credentials:true , origin : true}));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + "/public"));
 app.use(morgan("dev"));
@@ -43,12 +43,12 @@ app.use(
     key: "user_id",
     secret: process.env.secret,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
     proxy : true,
     cookie: {
       maxAge: 600000,
-      secure: true,
+      secure: false,
     },
   })
 );
