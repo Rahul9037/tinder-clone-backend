@@ -9,12 +9,7 @@ require("dotenv/config");
 //App Configs:
 const app = express();
 const port = process.env.PORT || 8001;
-<<<<<<< HEAD
 const connection_url = process.env.CONNECTION_URL;
-=======
-const connection_url =
-  "mongodb+srv://TinderAdmin:########@tinder.qlqre.mongodb.net/#####?retryWrites=true&w=majority";
->>>>>>> faa2f93c8ebcf93d96cc4fdc79d4dda91a5b2ab9
 
 //Mongoose Connection
 mongoose.connect(
